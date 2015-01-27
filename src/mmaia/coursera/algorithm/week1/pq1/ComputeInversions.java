@@ -19,8 +19,8 @@ public class ComputeInversions {
 	private final static Logger log = Logger.getLogger(ComputeInversions.class.getName());
 
 	public static void main(String[] args) {
-		String fileName = "IntegerArray.txt";
-		// String fileName = "TC1Week1PA1_Answer_3.txt";
+		// String fileName = "IntegerArray.txt";
+		String fileName = "TC1Week1PA1_Answer_3.txt";
 		// String fileName = "TC2Week1PA1_Answer_4.txt";
 		// String fileName = "TC3Week1PA1_Answer_10.txt";
 		// String fileName = "TC4Week1PA1_Answer_5.txt";
@@ -34,31 +34,29 @@ public class ComputeInversions {
 		// when star counting from 1.
 		int numberOfLines = numberOfFileLines(fileName);
 
-		int[] listOfIntegers = new int[numberOfLines + 1];
+		int[] listOfIntegersForInsertionSort = new int[numberOfLines + 1];
 
 		// loads the array from file lines
-		for (int i = 0; i < listOfIntegers.length; i++) {
-			listOfIntegers[i] = scanner.nextInt();
+		for (int i = 0; i < listOfIntegersForInsertionSort.length; i++) {
+			listOfIntegersForInsertionSort[i] = scanner.nextInt();
 		}
-		log.info("Finished loading array");
-		// log.info("Original Array: " + Arrays.toString(listOfIntegers));
+		int[] listOfIntegersForMergeSort = Arrays.copyOf(listOfIntegersForInsertionSort,
+				listOfIntegersForInsertionSort.length);
+		log.info("Finished loading arrays ==>> " + Arrays.toString(listOfIntegersForInsertionSort));
+		log.info("Original Array: " + Arrays.toString(listOfIntegersForInsertionSort));
 
 		// sort the array using the InsertionSort algorithm(linear) Big-O(n^2)
-		insertionSort(listOfIntegers);
+		insertionSort(listOfIntegersForInsertionSort);
 
-		// because the array is sorted by the insertionSort above need to load
-		// unsorted from file again.
-		// loads the array from file lines
-		for (int i = 0; i < listOfIntegers.length; i++) {
-			listOfIntegers[i] = scanner.nextInt();
-		}
-		log.info("Finished loading array");
-		
-		mergeSort(listOfIntegers);
+		mergeSort(listOfIntegersForMergeSort);
 		// log.info("The total number of inversions of the file: " + fileName +
 		// " is: " + numberOfInversions);
 	}
 
+	// TODO - This insertion sort implementation runs 2.5 times faster than
+	// the next one insertionSortNotOptimal below while parsing the
+	// IntegerArray.txt file).
+	// I need to study this and find out why.
 	/**
 	 * Sort array passed using linear implementation(InsertionSort algorithm).
 	 * Asymptotic Big-O(worst case) running time O(n^2), Big-theta(best case)
@@ -67,7 +65,32 @@ public class ComputeInversions {
 	 * @param arrayToSort
 	 *            - The array to be sorted.
 	 */
-	private static void insertionSort(int[] arrayToSort) {
+	private static final void insertionSort(int[] toSort) {
+		long initialTime = System.currentTimeMillis();
+		long inversionCount = 0;
+		for (int i = 0; i < toSort.length; i++) {
+			int value = toSort[i];
+			int j = i - 1;
+			while (j >= 0 && toSort[j] > value) {
+				toSort[j + 1] = toSort[j];
+				j = j - 1;
+				inversionCount++;
+			}
+			toSort[j + 1] = value;
+		}
+		long finalTime = System.currentTimeMillis();
+		long totalTime = finalTime - initialTime;
+		log.info("Finished sorting array using insertion Sort, total time:  " + totalTime + " miliseconds "
+				+ " number of inversions: " + inversionCount);
+		log.info("Sorted array===========: \n" + Arrays.toString(toSort));
+	}
+
+	/**
+	 * This was my first implementation try, it's much slower than the above, optimal one that 
+	 * I implemented after studying the algorithm in more details.
+	 * @param arrayToSort
+	 */
+	private static final void insertionSortNotOptimal(int[] arrayToSort) {
 		long initialTime = System.currentTimeMillis();
 		long inversionCount = 0;
 
@@ -93,37 +116,56 @@ public class ComputeInversions {
 		long totalTime = finalTime - initialTime;
 		log.info("Finished sorting array using insertion Sort, total time:  " + totalTime + " miliseconds "
 				+ " number of inversions: " + inversionCount);
-		// log.info("Sorted array===========: \n" +
-		// Arrays.toString(arrayToSort));
+		log.info("Sorted array===========: \n" + Arrays.toString(arrayToSort));
 	}
 
-	private static void mergeSort(int[] arrayToSort) {
+	/**
+	 * Recursive merge sort implementation. Implements the divide and conquer paradigm and recursion.
+	 * Divides the array and than merge the nodes parsing it calling the mergeParts below. 
+	 * @param arrayToSort
+	 */
+	private static final void mergeSort(int[] arrayToSort) {
+		long initialTime = System.currentTimeMillis();
+		if (arrayToSort.length <= 1) {
+			return;
+		}
 
+		int[] firstHalf = new int[arrayToSort.length / 2];
+		System.arraycopy(arrayToSort, 0, firstHalf, 0, firstHalf.length);
+
+		int[] secondHalf = new int[arrayToSort.length - firstHalf.length];
+		System.arraycopy(arrayToSort, firstHalf.length, secondHalf, 0, secondHalf.length);
+		
+		mergeSort(firstHalf);
+		mergeSort(secondHalf);
+		
+		mergeParts(firstHalf, secondHalf, arrayToSort);
+
+		long finalTime = System.currentTimeMillis();
+		long totalTime = finalTime - initialTime;
+		log.info("Finished sorting array using merge sort, total time:  " + totalTime + " miliseconds " + " sorted Array: " + Arrays.toString(arrayToSort));
 	}
 
-	// TODO - This insertion sort implementation runs 2.5 times faster than
-	// mine(3820ms avg when parsing the IntegerArray.txt file). I need to study
-	// this and find out why.
-	// private static void insertionSort(int[] toSort) {
-	// long initialTime = System.currentTimeMillis();
-	// long inversionCount = 0;
-	// for (int i = 0; i < toSort.length; i++) {
-	// int value = toSort[i];
-	// int j = i - 1;
-	// while (j >= 0 && toSort[j] > value) {
-	// toSort[j + 1] = toSort[j];
-	// j = j - 1;
-	// inversionCount++;
-	// }
-	// toSort[j + 1] = value;
-	// }
-	// long finalTime = System.currentTimeMillis();
-	// long totalTime = finalTime - initialTime;
-	// log.info("Finished sorting array using insertion Sort, total time:  " +
-	// totalTime + " miliseconds "
-	// + " number of inversions: " + inversionCount);
-	// log.info("Sorted array===========: \n" + Arrays.toString(toSort));
-	// }
+	//TODO - not yet finished. issues an error as it is. 
+	private static final void mergeParts(int[] firstHalf, int[] secondHalf, int [] arrayToSort) {
+		log.info("merging parts");
+		
+		//keeps track of firstHalf array
+		int firstCounter = 0;
+		
+		//keeps track of secondHalfArray
+		int secondCounter = 0;
+		
+		for (int i = 0; i < arrayToSort.length; i++) {
+			if(firstHalf[firstCounter] < secondHalf[secondCounter]){
+				arrayToSort[i] = firstHalf[firstCounter];
+				firstCounter++;
+			}else{
+				arrayToSort[i] = secondHalf[secondCounter];
+				secondCounter++;
+			}
+		}
+	}
 
 	/**
 	 * Load the file in a Scanner object.
@@ -138,7 +180,7 @@ public class ComputeInversions {
 		try {
 			file = new File(fileName);
 			result = new Scanner(file);
-			log.info("File loaded");
+			log.info("File loaded " + file.getName());
 		} catch (FileNotFoundException e) {
 			log.severe("Error loading file: " + e.getMessage());
 			e.printStackTrace();
