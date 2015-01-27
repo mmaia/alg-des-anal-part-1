@@ -20,8 +20,8 @@ public class ComputeInversions {
 
 	public static void main(String[] args) {
 		// String fileName = "IntegerArray.txt";
-		String fileName = "TC1Week1PA1_Answer_3.txt";
-		// String fileName = "TC2Week1PA1_Answer_4.txt";
+//		String fileName = "TC1Week1PA1_Answer_3.txt";
+		 String fileName = "TC2Week1PA1_Answer_4.txt";
 		// String fileName = "TC3Week1PA1_Answer_10.txt";
 		// String fileName = "TC4Week1PA1_Answer_5.txt";
 		// String fileName = "TC5Week1PA1_Answer_56.txt";
@@ -43,12 +43,18 @@ public class ComputeInversions {
 		int[] listOfIntegersForMergeSort = Arrays.copyOf(listOfIntegersForInsertionSort,
 				listOfIntegersForInsertionSort.length);
 		log.info("Finished loading arrays ==>> " + Arrays.toString(listOfIntegersForInsertionSort));
-		log.info("Original Array: " + Arrays.toString(listOfIntegersForInsertionSort));
+		log.info("Original Array for insertion sort: " + Arrays.toString(listOfIntegersForInsertionSort));
 
 		// sort the array using the InsertionSort algorithm(linear) Big-O(n^2)
 		insertionSort(listOfIntegersForInsertionSort);
 
+		
+		log.info("Original Array for merge sort: " + Arrays.toString(listOfIntegersForMergeSort));
+		long initialTime = System.currentTimeMillis();
 		mergeSort(listOfIntegersForMergeSort);
+		long finalTime = System.currentTimeMillis();
+		long totalTime = finalTime - initialTime;
+		log.info("Finished sorting array using merge sort, total time:  " + totalTime + " miliseconds " + " sorted Array: " + Arrays.toString(listOfIntegersForMergeSort));
 		// log.info("The total number of inversions of the file: " + fileName +
 		// " is: " + numberOfInversions);
 	}
@@ -122,49 +128,64 @@ public class ComputeInversions {
 	/**
 	 * Recursive merge sort implementation. Implements the divide and conquer paradigm and recursion.
 	 * Divides the array and than merge the nodes parsing it calling the mergeParts below. 
+	 * 
 	 * @param arrayToSort
 	 */
 	private static final void mergeSort(int[] arrayToSort) {
-		long initialTime = System.currentTimeMillis();
+		
 		if (arrayToSort.length <= 1) {
 			return;
 		}
 
+		//first half size
 		int[] firstHalf = new int[arrayToSort.length / 2];
+		//copies first half from original array.
 		System.arraycopy(arrayToSort, 0, firstHalf, 0, firstHalf.length);
 
+		//defines the size of the second half(deals with odd numbers from the original list so this can be 1 bigger than the first half)
 		int[] secondHalf = new int[arrayToSort.length - firstHalf.length];
+		//copies the rest of the original array in the secondHalf array
 		System.arraycopy(arrayToSort, firstHalf.length, secondHalf, 0, secondHalf.length);
 		
+		//recurse first half
 		mergeSort(firstHalf);
+		
+		//recurse second half
 		mergeSort(secondHalf);
 		
+		//merge each leafs sorting it
 		mergeParts(firstHalf, secondHalf, arrayToSort);
-
-		long finalTime = System.currentTimeMillis();
-		long totalTime = finalTime - initialTime;
-		log.info("Finished sorting array using merge sort, total time:  " + totalTime + " miliseconds " + " sorted Array: " + Arrays.toString(arrayToSort));
 	}
 
 	//TODO - not yet finished. issues an error as it is. 
 	private static final void mergeParts(int[] firstHalf, int[] secondHalf, int [] arrayToSort) {
-		log.info("merging parts");
-		
 		//keeps track of firstHalf array
 		int firstCounter = 0;
 		
 		//keeps track of secondHalfArray
 		int secondCounter = 0;
 		
-		for (int i = 0; i < arrayToSort.length; i++) {
+		int arraySortCounter = 0;
+		
+		while (firstCounter < firstHalf.length && secondCounter < secondHalf.length) {
 			if(firstHalf[firstCounter] < secondHalf[secondCounter]){
-				arrayToSort[i] = firstHalf[firstCounter];
+				arrayToSort[arraySortCounter] = firstHalf[firstCounter];
 				firstCounter++;
 			}else{
-				arrayToSort[i] = secondHalf[secondCounter];
+				arrayToSort[arraySortCounter] = secondHalf[secondCounter];
 				secondCounter++;
 			}
+			arraySortCounter++;
 		}
+		
+		//if it's even initial list there will be one missing value not processed in the while loop above. Need to take care of that: 
+//		if(firstHalf[firstCounter]{
+//			//than copy last element from firstHalf into final merged array.
+//			arrayToSort[arraySortCounter] = firstHalf[firstCounter];
+//		}else{
+//			//than copy last element from secondHalf into final merged array.
+//			arrayToSort[arraySortCounter] = secondHalf[secondCounter];
+//		}
 	}
 
 	/**
