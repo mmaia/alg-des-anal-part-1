@@ -19,14 +19,14 @@ public class ComputeInversions {
 	private final static Logger log = Logger.getLogger(ComputeInversions.class.getName());
 
 	public static void main(String[] args) {
-		// String fileName = "IntegerArray.txt";
-//		String fileName = "TC1Week1PA1_Answer_3.txt";
-		 String fileName = "TC2Week1PA1_Answer_4.txt";
-		// String fileName = "TC3Week1PA1_Answer_10.txt";
-		// String fileName = "TC4Week1PA1_Answer_5.txt";
-		// String fileName = "TC5Week1PA1_Answer_56.txt";
-		// String fileName = "TC6Week1PA1_Answer_590.txt";
-		// String fileName = "TC7Week1PA1_Answer_2372.txt";
+//		 String fileName = "IntegerArray_Answer_2407905288.txt";
+		String fileName = "TC1Week1PA1_Answer_3.txt";
+//		 String fileName = "TC2Week1PA1_Answer_4.txt";
+//		 String fileName = "TC3Week1PA1_Answer_10.txt";
+//		 String fileName = "TC4Week1PA1_Answer_5.txt";
+//		 String fileName = "TC5Week1PA1_Answer_56.txt";
+//		 String fileName = "TC6Week1PA1_Answer_590.txt";
+//		 String fileName = "TC7Week1PA1_Answer_2372.txt";
 
 		Scanner scanner = prepareScanner(fileName);
 
@@ -42,19 +42,20 @@ public class ComputeInversions {
 		}
 		int[] listOfIntegersForMergeSort = Arrays.copyOf(listOfIntegersForInsertionSort,
 				listOfIntegersForInsertionSort.length);
-		log.info("Finished loading arrays ==>> " + Arrays.toString(listOfIntegersForInsertionSort));
-		log.info("Original Array for insertion sort: " + Arrays.toString(listOfIntegersForInsertionSort));
+//		log.info("Finished loading arrays ==>> " + Arrays.toString(listOfIntegersForInsertionSort));
+//		log.info("Original Array for insertion sort: " + Arrays.toString(listOfIntegersForInsertionSort));
 
 		// sort the array using the InsertionSort algorithm(linear) Big-O(n^2)
 		insertionSort(listOfIntegersForInsertionSort);
 
 		
-		log.info("Original Array for merge sort: " + Arrays.toString(listOfIntegersForMergeSort));
+//		log.info("Original Array for merge sort: " + Arrays.toString(listOfIntegersForMergeSort));
 		long initialTime = System.currentTimeMillis();
 		mergeSort(listOfIntegersForMergeSort);
 		long finalTime = System.currentTimeMillis();
 		long totalTime = finalTime - initialTime;
-		log.info("Finished sorting array using merge sort, total time:  " + totalTime + " miliseconds " + " sorted Array: " + Arrays.toString(listOfIntegersForMergeSort));
+		log.info("Finished sorting array using merge sort, total time:  " + totalTime + " miliseconds");
+		//		log.info("Finished sorting array using merge sort, total time:  " + totalTime + " miliseconds " + " sorted Array: " + Arrays.toString(listOfIntegersForMergeSort));
 		// log.info("The total number of inversions of the file: " + fileName +
 		// " is: " + numberOfInversions);
 	}
@@ -88,7 +89,7 @@ public class ComputeInversions {
 		long totalTime = finalTime - initialTime;
 		log.info("Finished sorting array using insertion Sort, total time:  " + totalTime + " miliseconds "
 				+ " number of inversions: " + inversionCount);
-		log.info("Sorted array===========: \n" + Arrays.toString(toSort));
+//		log.info("Sorted array===========: \n" + Arrays.toString(toSort));
 	}
 
 	/**
@@ -122,7 +123,7 @@ public class ComputeInversions {
 		long totalTime = finalTime - initialTime;
 		log.info("Finished sorting array using insertion Sort, total time:  " + totalTime + " miliseconds "
 				+ " number of inversions: " + inversionCount);
-		log.info("Sorted array===========: \n" + Arrays.toString(arrayToSort));
+//		log.info("Sorted array===========: \n" + Arrays.toString(arrayToSort));
 	}
 
 	/**
@@ -157,7 +158,12 @@ public class ComputeInversions {
 		mergeParts(firstHalf, secondHalf, arrayToSort);
 	}
 
-	//TODO - not yet finished. issues an error as it is. 
+	/**
+	 * Sort the halfs of the array. This version is not counting the inversions at this point.
+	 * @param firstHalf
+	 * @param secondHalf
+	 * @param arrayToSort
+	 */
 	private static final void mergeParts(int[] firstHalf, int[] secondHalf, int [] arrayToSort) {
 		//keeps track of firstHalf array
 		int firstCounter = 0;
@@ -178,14 +184,9 @@ public class ComputeInversions {
 			arraySortCounter++;
 		}
 		
-		//if it's even initial list there will be one missing value not processed in the while loop above. Need to take care of that: 
-//		if(firstHalf[firstCounter]{
-//			//than copy last element from firstHalf into final merged array.
-//			arrayToSort[arraySortCounter] = firstHalf[firstCounter];
-//		}else{
-//			//than copy last element from secondHalf into final merged array.
-//			arrayToSort[arraySortCounter] = secondHalf[secondCounter];
-//		}
+		//make sure copied the last element that didn't get processed in the while above(adjustment of this algorithm)
+		System.arraycopy(firstHalf, firstCounter, arrayToSort, arraySortCounter, firstHalf.length - firstCounter);
+        System.arraycopy(secondHalf, secondCounter, arrayToSort, arraySortCounter, secondHalf.length - secondCounter);
 	}
 
 	/**
