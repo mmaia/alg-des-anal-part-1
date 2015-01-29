@@ -1,13 +1,10 @@
-package mmaia.coursera.algorithm.week1.pq1;
+package mmaia.coursera.algorithm.week1;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Logger;
+
+import mmaia.coursera.algorithm.utils.Utils;
 
 /**
  * Does a linear computation of the number of inversions on the given file
@@ -19,8 +16,8 @@ public class ComputeInversions {
 	private final static Logger log = Logger.getLogger(ComputeInversions.class.getName());
 
 	public static void main(String[] args) {
-//		 String fileName = "IntegerArray_Answer_2407905288.txt";
-		String fileName = "TC1Week1PA1_Answer_3.txt";
+		 String fileName = "IntegerArray_Answer_2407905288.txt";
+//		String fileName = "TC1Week1PA1_Answer_3.txt";
 //		 String fileName = "TC2Week1PA1_Answer_4.txt";
 //		 String fileName = "TC3Week1PA1_Answer_10.txt";
 //		 String fileName = "TC4Week1PA1_Answer_5.txt";
@@ -28,11 +25,11 @@ public class ComputeInversions {
 //		 String fileName = "TC6Week1PA1_Answer_590.txt";
 //		 String fileName = "TC7Week1PA1_Answer_2372.txt";
 
-		Scanner scanner = prepareScanner(fileName);
+		Scanner scanner = Utils.prepareScanner(fileName);
 
 		// starts counting from 0 so numberOfLines is 1 less the the real one
 		// when star counting from 1.
-		int numberOfLines = numberOfFileLines(fileName);
+		int numberOfLines = Utils.numberOfFileLines(fileName);
 
 		int[] listOfIntegersForInsertionSort = new int[numberOfLines + 1];
 
@@ -187,62 +184,5 @@ public class ComputeInversions {
 		//make sure copied the last element that didn't get processed in the while above(adjustment of this algorithm)
 		System.arraycopy(firstHalf, firstCounter, arrayToSort, arraySortCounter, firstHalf.length - firstCounter);
         System.arraycopy(secondHalf, secondCounter, arrayToSort, arraySortCounter, secondHalf.length - secondCounter);
-	}
-
-	/**
-	 * Load the file in a Scanner object.
-	 * 
-	 * @param fileName
-	 *            to be loded to the scanner.
-	 * @return a scanner with the file loaded.
-	 */
-	private final static Scanner prepareScanner(String fileName) {
-		Scanner result = null;
-		File file = null;
-		try {
-			file = new File(fileName);
-			result = new Scanner(file);
-			log.info("File loaded " + file.getName());
-		} catch (FileNotFoundException e) {
-			log.severe("Error loading file: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	/**
-	 * Gives the number of lines(start counting from 0) of the given file. It
-	 * can only process files which are not bigger than java Integer.MAX_VALUE
-	 * if value is bigger than that it will return Integer.MAX_VALUE instead.
-	 * 
-	 * @param file
-	 *            - File object constructed from the desired file to count
-	 *            number of lines
-	 * @return the number of lines (start counting from 0, so to have the exact
-	 *         size add 1 to the return code of this method)
-	 */
-	@SuppressWarnings("resource")
-	private final static int numberOfFileLines(String fileName) {
-		File file = null;
-		int result = 0;
-		// getting the number of lines of the file
-		LineNumberReader lnr = null;
-		try {
-			file = new File(fileName);
-			lnr = new LineNumberReader(new FileReader(file));
-			// because this is bigger than the number of lines of the file goes
-			// to last line
-			lnr.skip(Integer.MAX_VALUE);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		result = lnr.getLineNumber();
-		log.info("Number of lines of this file: " + result
-				+ " need to add 1 to the result as this counting started from 0");
-		return result;
 	}
 }
