@@ -65,8 +65,7 @@ public class Utils {
 			e.printStackTrace();
 		}
 		result = lnr.getLineNumber();
-		log.info("Number of lines of this file: " + result
-				+ " need to add 1 to the result as this counting started from 0");
+		log.info("Number of lines of this file: " + (result + 1));
 		return result;
 	}
 }
