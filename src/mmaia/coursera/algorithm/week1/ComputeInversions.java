@@ -25,6 +25,8 @@ public class ComputeInversions {
 //		 String fileName = "TC6Week1PA1_Answer_590.txt";
 //		 String fileName = "TC7Week1PA1_Answer_2372.txt";
 
+//		 String fileName = "Week2TC1_Size10_Answers_25_29_21.txt";
+		 
 		Scanner scanner = Utils.prepareScanner(fileName);
 
 		// starts counting from 0 so numberOfLines is 1 less the the real one
