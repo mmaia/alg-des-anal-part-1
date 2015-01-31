@@ -17,8 +17,8 @@ public class QuickSortImplementation {
 
 	public static void main(String[] args) {
 //		String fileName = "QuickSort.txt";
-		 String fileName = "Week2TC1_Size10_Answers_25_29_21.txt";
-		// String fileName = "Week2TC2_Size100_Answers_615_587_518.txt";
+//		 String fileName = "Week2TC1_Size10_Answers_25_29_21.txt";
+		 String fileName = "Week2TC2_Size100_Answers_615_587_518.txt";
 		// String fileName = "Week2TC3_Size1000_Answers_10297_10184_8921.txt";
 		// String fileName = "IntegerArray_Answer_2407905288.txt";
 		Scanner scanner = Utils.prepareScanner(fileName);
@@ -90,6 +90,12 @@ public class QuickSortImplementation {
 	// counter to keep track of inversions
 	static long count = 0;
 
+	/**
+	 * Not working - TODO fix this implementation!!!!
+	 * @param arrayOfIntegersToBeSorted
+	 * @param initialPosition
+	 * @param finalPosition
+	 */
 	private static void quickSortPivotFirst(int[] arrayOfIntegersToBeSorted, int initialPosition, int finalPosition) {
 		if (arrayOfIntegersToBeSorted == null || arrayOfIntegersToBeSorted.length == 0)
 			return;
@@ -126,10 +132,11 @@ public class QuickSortImplementation {
 		swapPositions(initialPosition, i - 1, arrayOfIntegersToBeSorted);
 		System.out.println("After pivot in-place positioning" + Arrays.toString(arrayOfIntegersToBeSorted));
 
-		quickSort(arrayOfIntegersToBeSorted, 0, pivot - 1);
+		quickSortPivotFirst(arrayOfIntegersToBeSorted, 0, pivot);
 
 
-		quickSort(arrayOfIntegersToBeSorted, i, arrayOfIntegersToBeSorted.length - 1);
+//		quickSortPivotFirst(arrayOfIntegersToBeSorted, i, arrayOfIntegersToBeSorted.length - 1);
+		
 		System.out.println("inversion count " + count);
 	}
 
